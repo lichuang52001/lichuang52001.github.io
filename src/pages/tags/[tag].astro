@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { formatDate, sortPosts } from "../../lib/content";
+import { getAllPosts } from "../../lib/data";
+
+export async function getStaticPaths() {
+  const posts = getAllPosts();
+  const tags = [...new Set(posts.flatMap((p) => p.tags))];
+  return tags.map((tag) => ({ params: { tag }, props: { tag } }));
+}
+
+const { tag } = Astro.props;
+const posts = getAllPosts();
+const related = sortPosts(posts.filter((post) => post.tags.includes(tag)));
+---
+
+<BaseLayout title={`Tag: ${tag}`}>
+  <section class="post-header">
+    <p class="meta">TAG</p>
+    <h1 class="post-title">#{tag}</h1>
+  </section>
+  <section class="list">
+    {
+      related.map((post) => (
+        <article class="card">
+          <p class="meta">{formatDate(post.date)}</p>
+          <h2><a href={`/posts/${post.slug}/`}>{post.title}</a></h2>
+        </article>
+      ))
+    }
+  </section>
+</BaseLayout>

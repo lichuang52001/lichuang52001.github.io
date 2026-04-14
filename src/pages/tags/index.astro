@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getAllPosts } from "../../lib/data";
+
+const posts = getAllPosts();
+const tagCount = new Map<string, number>();
+for (const post of posts) {
+  for (const tag of post.tags) {
+    tagCount.set(tag, (tagCount.get(tag) || 0) + 1);
+  }
+}
+const tags = [...tagCount.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+---
+
+<BaseLayout title="Tags">
+  <section class="post-header">
+    <p class="meta">TAG INDEX · {tags.length}</p>
+    <h1 class="post-title">Tags</h1>
+  </section>
+  <section class="card">
+    <div class="chip-row">
+      {
+        tags.map(([tag, count]) => (
+          <a class="chip" href={`/tags/${encodeURIComponent(tag)}/`}>
+            #{tag} ({count})
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

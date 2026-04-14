@@ -1,0 +1,42 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Search">
+  <section class="post-header">
+    <p class="meta">LOCAL SEARCH</p>
+    <h1 class="post-title">Search</h1>
+  </section>
+  <section class="list">
+    <input id="q" class="search-box" type="search" placeholder="Type keywords..." />
+    <div id="result" class="list"></div>
+  </section>
+</BaseLayout>
+
+<script>
+  const q = document.getElementById("q");
+  const result = document.getElementById("result");
+  let records = [];
+
+  fetch("/search.json")
+    .then((r) => r.json())
+    .then((json) => {
+      records = json;
+      render("");
+    });
+
+  const render = (keyword) => {
+    const key = keyword.trim().toLowerCase();
+    const list = key
+      ? records.filter((item) => `${item.title} ${item.excerpt} ${item.tags.join(" ")}`.toLowerCase().includes(key))
+      : records;
+    result.innerHTML = list
+      .map(
+        (item) =>
+          `<article class="card"><p class="meta">${item.date}</p><h2><a href="${item.url}">${item.title}</a></h2><p>${item.excerpt}</p></article>`
+      )
+      .join("");
+  };
+
+  q?.addEventListener("input", (e) => render(e.target.value || ""));
+</script>

@@ -1,0 +1,58 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const siteTitle = "Edward's site";
+const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description || "Personal blog"} />
+    <meta name="theme-color" content="#0f1115" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+      integrity="sha384-nB0miv6zGYaM5uWlJ7R8WJ6QhP3vY6V2fB4H5Y5f2M7V8S2Y5H7vY7m9x4l8Xf8v"
+      crossorigin="anonymous"
+    />
+    <title>{fullTitle}</title>
+  </head>
+  <body>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="container nav-row">
+        <a class="brand" href="/">EDWARD/LOG</a>
+        <nav class="nav-links">
+          <a href="/">Home</a>
+          <a href="/about/">About</a>
+          <a href="/archives/">Archives</a>
+          <a href="/tags/">Tags</a>
+          <a href="/categories/">Categories</a>
+          <a href="/search/">Search</a>
+        </nav>
+      </div>
+    </header>
+    <main class="container">
+      <slot />
+    </main>
+    <footer class="site-footer container">
+      <p>CHUANG</p>
+    </footer>
+  </body>
+</html>

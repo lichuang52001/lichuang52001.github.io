@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getAllPosts } from "../../lib/data";
+
+const posts = getAllPosts();
+const categoryCount = new Map<string, number>();
+for (const post of posts) {
+  for (const cat of post.categories) {
+    categoryCount.set(cat, (categoryCount.get(cat) || 0) + 1);
+  }
+}
+const categories = [...categoryCount.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+---
+
+<BaseLayout title="Categories">
+  <section class="post-header">
+    <p class="meta">CATEGORY INDEX · {categories.length}</p>
+    <h1 class="post-title">Categories</h1>
+  </section>
+  <section class="card">
+    <div class="chip-row">
+      {
+        categories.map(([cat, count]) => (
+          <a class="chip" href={`/categories/${encodeURIComponent(cat)}/`}>
+            {cat} ({count})
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

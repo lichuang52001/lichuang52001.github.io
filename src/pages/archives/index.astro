@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { formatDate, sortPosts } from "../../lib/content";
+import { getAllPosts } from "../../lib/data";
+
+const posts = sortPosts(getAllPosts());
+---
+
+<BaseLayout title="Archives">
+  <section class="post-header">
+    <p class="meta">ARCHIVE · {posts.length} POSTS</p>
+    <h1 class="post-title">Archives</h1>
+  </section>
+  <section class="list">
+    {
+      posts.map((post) => (
+        <article class="card">
+          <p class="meta">{formatDate(post.date)}</p>
+          <h2><a href={`/posts/${post.slug}/`}>{post.title}</a></h2>
+        </article>
+      ))
+    }
+  </section>
+</BaseLayout>

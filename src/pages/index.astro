@@ -1,0 +1,39 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { excerptFromBody, formatDate, sortPosts } from "../lib/content";
+import { getAllPosts } from "../lib/data";
+
+const posts = sortPosts(getAllPosts());
+const sorted = [...posts].sort((a, b) => Number(b.top) - Number(a.top));
+---
+
+<BaseLayout title="Home" description="Minimal personal tech blog">
+  <section class="hero">
+    <p class="mono">AI / COMPUTER VISION / ENGINEERING LOG</p>
+    <h1>Edward Chuang Li</h1>
+    <p>
+      Less noise, more signal. This is a static lab notebook for engineering notes, technical references,
+      and long-form thinking.
+    </p>
+  </section>
+
+  <section class="list">
+    {
+      sorted.map((post) => (
+        <article class="card">
+          <p class="meta">{formatDate(post.date)} · {post.slug}</p>
+          <h2><a href={`/posts/${post.slug}/`}>{post.title}</a></h2>
+          <p>{excerptFromBody(post.body)}</p>
+          <div class="chip-row">
+            {post.categories.map((cat) => (
+              <a class="chip" href={`/categories/${encodeURIComponent(cat)}/`}>{cat}</a>
+            ))}
+            {post.tags.slice(0, 4).map((tag) => (
+              <a class="chip" href={`/tags/${encodeURIComponent(tag)}/`}>#{tag}</a>
+            ))}
+          </div>
+        </article>
+      ))
+    }
+  </section>
+</BaseLayout>

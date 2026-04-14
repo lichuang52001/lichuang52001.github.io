@@ -1,0 +1,19 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { formatDate } from "../../lib/content";
+import { getAboutPage } from "../../lib/data";
+
+const about = getAboutPage();
+if (!about) throw new Error("About page not found");
+const Content = about.Content;
+---
+
+<BaseLayout title="About">
+  <section class="post-header">
+    <p class="meta">{formatDate(about.date)} · PROFILE</p>
+    <h1 class="post-title">{about.title || "About"}</h1>
+  </section>
+  <section class="prose">
+    <Content />
+  </section>
+</BaseLayout>
