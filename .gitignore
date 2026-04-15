@@ -7,4 +7,3 @@ public/
 .deploy*/
 .astro/
 dist/
-_legacy_deploy_git_to_delete/
